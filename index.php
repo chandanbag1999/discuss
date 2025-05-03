@@ -7,10 +7,19 @@
 </head>
 <body>
 
+  <?php 
+    include("./client/header.php");
 
+    if (isset($_GET["signup"])) {
+      include("./client/sign_up.php");
+    } else if (isset($_GET["signin"])) {
+      include("./client/sign_in.php");
+    } else {
+      //
+    }
+    
+  ?>
 
-
-
-  <?php include("./client/header.php")?>
+  
 </body>
 </html>
