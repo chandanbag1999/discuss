@@ -12,8 +12,10 @@
 
     $result = $user->execute();
 
+    $user->insert_id;
+
     if ($result) {
-      $_SESSION["user"] = ["username"=>$username, "email"=>$email];
+      $_SESSION["user"] = ["username"=>$username, "email"=>$email, "user_id" => $user->insert_id];
       header("location: /discuss");
 
     } else {
@@ -23,6 +25,7 @@
     $email = $_POST["email"];
     $password = $_POST["password"];
     $username= "";
+    $user_id= 0;
 
     $query = "select * from users where email='$email' and password='$password'";
 
@@ -31,8 +34,9 @@
     if ($result->num_rows == 1) {
       foreach ($result as $row) {
         $username = $row['username'];
+        $user_id = $row['id'];
       }
-      $_SESSION["user"]=["username" => $username, "email" => $email];
+      $_SESSION["user"]=["username" => $username, "email" => $email, "user_id" => $user->insert_id];
       header("location: /discuss");
     } else {
       echo "New user not registered";
@@ -40,5 +44,36 @@
   } else if(isset($_GET["logout"])){
     session_unset();
     header("location: /discuss");
+  } else if(isset($_POST["ask"])){
+    $title = $_POST["title"];
+    $description = $_POST["description"];
+    $category_id = $_POST["category"];
+    $user_id = $_SESSION['user']['user_id'];
+
+    $question_query = $conn->prepare("Insert into `questions` (`id`, `title`, `description`, `category_id`, `user_id`) values(NULL, '$title', '$description', '$category_id', '$user_id')");
+
+    $result = $question_query->execute();
+    $question_query->insert_id;
+
+    if ($result) {
+      header("location: /discuss");
+    } else {
+      echo "question to add to website";
+    }
+  } else if(isset($_POST["answer"])){
+    $answer = $_POST['answer'];
+    $question_id = $_POST['question_id'];
+    $user_id = $_SESSION['user']['user_id'];
+
+    $query = $conn->prepare("Insert into `answers` (`id`,`answer`,`question_id`,`user_id`) values(NULL,'$answer','$question_id','$user_id')");
+
+
+    $result = $query->execute();
+
+    if ($result) {
+      header("location: /discuss?q-id=$question_id");
+    } else {
+      echo "Answer is not submitted";
+    }
   }
 ?>
