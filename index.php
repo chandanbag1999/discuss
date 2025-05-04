@@ -3,17 +3,22 @@
 <head>
   
   <title>Discuss Project</title>
-  <?php include("./client/commonFiles.php");?>
+  <?php 
+    session_start();
+    include("./client/commonFiles.php");
+  ?>
 </head>
 <body>
 
   <?php 
     include("./client/header.php");
 
-    if (isset($_GET["signup"])) {
+    if (isset($_GET["signup"]) && (!isset($_SESSION['user']) || !isset($_SESSION['user']['username']))) {
       include("./client/sign_up.php");
-    } else if (isset($_GET["signin"])) {
+    } else if (isset($_GET["signin"]) && (!isset($_SESSION['user']) || !isset($_SESSION['user']['username']))) {
       include("./client/sign_in.php");
+    } else if (isset($_GET["ask"])) {
+      include("./client/ask.php");
     } else {
       //
     }
