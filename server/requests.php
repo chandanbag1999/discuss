@@ -36,7 +36,7 @@
         $username = $row['username'];
         $user_id = $row['id'];
       }
-      $_SESSION["user"]=["username" => $username, "email" => $email, "user_id" => $user->insert_id];
+      $_SESSION["user"]=["username" => $username, "email" => $email, "user_id" => $user_id];
       header("location: /discuss");
     } else {
       echo "New user not registered";
@@ -58,7 +58,7 @@
     if ($result) {
       header("location: /discuss");
     } else {
-      echo "question to add to website";
+      echo "Question to add to website";
     }
   } else if(isset($_POST["answer"])){
     $answer = $_POST['answer'];
@@ -74,6 +74,15 @@
       header("location: /discuss?q-id=$question_id");
     } else {
       echo "Answer is not submitted";
+    }
+  } else if (isset($_GET["delete"])) {
+    echo $qid = $_GET["delete"];
+    $query = $conn->prepare("delete from questions where id =$qid");
+    $result = $query->execute();
+    if($result){
+      header("location: /discuss");
+    }else {
+      echo "Question not deleted";
     }
   }
 ?>

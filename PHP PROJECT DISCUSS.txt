@@ -1,0 +1,8 @@
+PHP PROJECT DISCUSS:
+
+Domain_name:discuss.42web.io
+host:sql109.infinityfree.com
+password:x5IaNvlWO5b
+username:if0_38907958
+db_name:if0_38907958_discuss
+

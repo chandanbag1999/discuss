@@ -1,16 +1,23 @@
-<select class="form-control" name="category" id="category">
-  <option value="">Select A Category</option>
-  <?php
-    include("./db/config.php");
+<div class="input-group">
+  <span class="input-group-text"><i class="bi bi-tag"></i></span>
+  <select class="form-select" name="category" id="category" required>
+    <option value="">Select A Category</option>
+    <?php
+      include("./db/config.php");
 
-    $query = "select * from category";
-    $result = $conn->query($query);
+      $query = "select * from category";
+      $result = $conn->query($query);
 
-    foreach ($result as $row) {
-      $name = ucfirst($row['name']);
-      $id = $row['id'];
+      if ($result->num_rows > 0) {
+        foreach ($result as $row) {
+          $name = ucfirst($row['name']);
+          $id = $row['id'];
 
-      echo "<option value=$id>$name</option>";
-    }
-  ?>
-</select>
+          echo "<option value=$id>$name</option>";
+        }
+      } else {
+        echo "<option disabled>No categories available</option>";
+      }
+    ?>
+  </select>
+</div>
