@@ -16,8 +16,8 @@
 
     if ($result) {
       $_SESSION["user"] = ["username"=>$username, "email"=>$email, "user_id" => $user->insert_id];
-      header("location: /discuss");
-
+      header("location: ../");
+      exit();
     } else {
       echo "New user not registered";
     }
@@ -37,13 +37,20 @@
         $user_id = $row['id'];
       }
       $_SESSION["user"]=["username" => $username, "email" => $email, "user_id" => $user_id];
-      header("location: /discuss");
+      header("location: ../");
+      exit();
     } else {
       echo "New user not registered";
     }
   } else if(isset($_GET["logout"])){
-    session_unset();
-    header("location: /discuss");
+    // Simple approach that works on most shared hosting
+    session_start(); // Ensure session is started
+    $_SESSION = array(); // Clear all session variables
+    session_destroy(); // Destroy the session
+    
+    // Redirect with query parameter to avoid caching issues
+    header("location: ../?logged_out=true");
+    exit();
   } else if(isset($_POST["ask"])){
     $title = $_POST["title"];
     $description = $_POST["description"];
@@ -56,7 +63,8 @@
     $question_query->insert_id;
 
     if ($result) {
-      header("location: /discuss");
+      header("location: ../");
+      exit();
     } else {
       echo "Question to add to website";
     }
@@ -71,16 +79,18 @@
     $result = $query->execute();
 
     if ($result) {
-      header("location: /discuss?q-id=$question_id");
+      header("location: ../?q-id=$question_id");
+      exit();
     } else {
       echo "Answer is not submitted";
     }
   } else if (isset($_GET["delete"])) {
-    echo $qid = $_GET["delete"];
+    $qid = $_GET["delete"];
     $query = $conn->prepare("delete from questions where id =$qid");
     $result = $query->execute();
     if($result){
-      header("location: /discuss");
+      header("location: ../");
+      exit();
     }else {
       echo "Question not deleted";
     }

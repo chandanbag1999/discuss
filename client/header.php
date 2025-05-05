@@ -16,7 +16,7 @@
          <?php 
             if (isset($_SESSION['user']) && isset($_SESSION['user']['username'])) { ?>
               <li class="nav-item">
-                <a class="nav-link" href="./server/requests.php?logout=true"><i class="bi bi-box-arrow-right"></i> Logout</a>
+                <a class="nav-link" href="./?logout=true"><i class="bi bi-box-arrow-right"></i> Logout</a>
               </li>
 
               <li class="nav-item">
